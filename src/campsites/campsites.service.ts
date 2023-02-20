@@ -1,10 +1,11 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { Campsite } from './campsite.interface';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class CampsitesService {
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService, private prisma: PrismaClient) {}
 
   async getCampsitesFromApi(): Promise<Campsite[]> {
     const response = await this.httpService
@@ -27,6 +28,41 @@ export class CampsitesService {
       facilities: item.facltcltynm,
       phone: item.telno,
     }));
+
+    return campsites;
+  }
+
+  async search(
+    name?: string,
+    city?: string,
+    state?: string,
+    amenities?: string[],
+  ) {
+    const filter: any = {
+      AND: [],
+    };
+    if (name) {
+      filter.AND.push({ name: { contains: name } });
+    }
+
+    if (city) {
+      filter.AND.push({ city: { contains: city } });
+    }
+
+    if (state) {
+      filter.AND.push({ state: { contains: state } });
+    }
+
+    if (amenities && amenities.length > 0) {
+      filter.AND.push({ Amenities: { some: { name: { in: amenities } } } });
+    }
+
+    const campsites = await this.prisma.campsite.findMany({
+      where: filter,
+      include: {
+        amenities: true,
+      },
+    });
 
     return campsites;
   }

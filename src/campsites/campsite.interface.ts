@@ -18,7 +18,9 @@ export interface User {
 }
 
 export interface SearchQuery {
-  location: string;
+  name: string;
+  city: string;
+  state: string;
   checkIn: Date;
   checkOut: Date;
   maxDistance: number;
