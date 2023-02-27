@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { CampsitesService } from './campsites.service';
-import { HttpModule } from '@nestjs/axios';
 import { CampsitesScheduler } from './campsites.scheduler';
+import { CampsitesController } from './campsites.controller';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports: [HttpModule],
-  controllers: [],
+  imports: [ConfigModule, PrismaModule],
+  controllers: [CampsitesController],
   providers: [CampsitesService, CampsitesScheduler],
 })
 export class CampsitesModule {}

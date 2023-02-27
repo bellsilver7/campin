@@ -10,22 +10,4 @@ export class AppController {
   home() {
     return { brandName: 'campin' };
   }
-
-  @Get('/campsites')
-  @Render('campsites')
-  campsites() {
-    return { brandName: 'campin' };
-  }
-
-  @Get('/campsites/:id')
-  @Render('campsite-detail')
-  campsite() {
-    return { brandName: 'campin' };
-  }
-
-  @Get('/reservation')
-  @Render('reservation')
-  reservation() {
-    return { brandName: 'campin' };
-  }
 }

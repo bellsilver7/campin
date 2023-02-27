@@ -1,12 +1,20 @@
 export interface Campsite {
-  id: string;
   name: string;
+  intro: string;
   description: string;
-  latitude: number;
-  longitude: number;
-  amenities: string[];
+  city: string;
+  state: string;
+  address: string;
+  address2: string;
+  locationClass: string;
+  mapX: string;
+  mapY: string;
+  homepage: string;
   imageUrl: string;
-  bookingUrl: string;
+  // latitude: number | null;
+  // longitude: number | null;
+  // amenities: string[];
+  // bookingUrl: string;
 }
 
 export interface User {
