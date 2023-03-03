@@ -19,36 +19,30 @@ export class CampsitesController {
     return this.campsiteService.getCampsitesFromApi();
   }
 
+  @Post()
+  create(@Body() data: Prisma.CampsiteCreateInput) {
+    return this.campsiteService.create(data);
+  }
+
   @Get()
-  index(
+  findAll(
     @Body('skip') skip: number,
     @Body('take') take: number,
     @Body('cursor') cursor: Prisma.CampsiteWhereUniqueInput,
     @Body('where') where: Prisma.CampsiteWhereInput,
     @Body('orderBy') orderBy: Prisma.CampsiteOrderByWithRelationInput,
   ) {
-    return this.campsiteService.findAll({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-    });
+    return this.campsiteService.findAll({ skip, take, cursor, where, orderBy });
   }
 
   @Get('/:id')
-  show(@Param('id') id: string) {
+  findOne(@Param('id') id: string) {
     return this.campsiteService.find({ id });
-  }
-
-  @Post()
-  create(@Body() data: Prisma.CampsiteCreateInput) {
-    return this.campsiteService.create(data);
   }
 
   @Patch('/:id')
   update(@Body() data: Prisma.CampsiteUpdateInput, @Param('id') id: string) {
-    return this.campsiteService.update({ data, where: { id } });
+    return this.campsiteService.update(data, { id });
   }
 
   @Delete('/:id')

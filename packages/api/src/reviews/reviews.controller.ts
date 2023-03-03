@@ -36,8 +36,8 @@ export class ReviewsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() data: Prisma.ReviewUpdateInput) {
-    return this.reviewsService.update({ id }, data);
+  update(@Body() data: Prisma.ReviewUpdateInput, @Param('id') id: string) {
+    return this.reviewsService.update(data, { id });
   }
 
   @Delete(':id')

@@ -24,8 +24,8 @@ export class ReviewsService {
   }
 
   update(
-    where: Prisma.ReviewWhereUniqueInput,
     data: Prisma.ReviewUpdateInput,
+    where: Prisma.ReviewWhereUniqueInput,
   ): Promise<Review> {
     return this.prisma.review.update({ where, data });
   }

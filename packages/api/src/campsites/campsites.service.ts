@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Campsite, Prisma } from '@prisma/client';
 import axios from 'axios';
@@ -108,6 +108,10 @@ export class CampsitesService {
     return true;
   }
 
+  create(data: Prisma.CampsiteCreateInput): Promise<Campsite> {
+    return this.prisma.campsite.create({ data });
+  }
+
   find(where?: Prisma.CampsiteWhereUniqueInput): Promise<Campsite | null> {
     return this.prisma.campsite.findUnique({ where });
   }
@@ -131,15 +135,10 @@ export class CampsitesService {
     });
   }
 
-  create(data: Prisma.CampsiteCreateInput): Promise<Campsite> {
-    return this.prisma.campsite.create({ data });
-  }
-
-  update(params: {
-    data: Prisma.CampsiteUpdateInput;
-    where: Prisma.CampsiteWhereUniqueInput;
-  }): Promise<Campsite> {
-    const { data, where } = params;
+  update(
+    data: Prisma.CampsiteUpdateInput,
+    where: Prisma.CampsiteWhereUniqueInput,
+  ): Promise<Campsite> {
     return this.prisma.campsite.update({ data, where });
   }
 
