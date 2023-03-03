@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { CampsitesModule } from './campsites/campsites.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { CampsitesModule } from './campsites/campsites.module';
       isGlobal: true,
     }),
     CampsitesModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
