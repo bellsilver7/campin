@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Campsite {
-  id             Int         @id @default(autoincrement())
+  id             String      @id @default(uuid())
   contentId      Int         @unique
   name           String
   intro          String?
@@ -27,8 +27,8 @@ model Campsite {
 }
 
 model Amenities {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   name       String
-  campsiteId Int
+  campsiteId String
   campsite   Campsite @relation(fields: [campsiteId], references: [id])
 }

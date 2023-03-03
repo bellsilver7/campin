@@ -25,16 +25,6 @@ export interface User {
   savedCampsites: Campsite[];
 }
 
-export interface CampsiteSearchRequest {
-  name: string;
-  city: string;
-  state: string;
-  checkIn: Date;
-  checkOut: Date;
-  maxDistance: number;
-  amenities: string[];
-}
-
 export interface Review {
   id: string;
   author: User;

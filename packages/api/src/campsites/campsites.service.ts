@@ -1,22 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Campsite } from '@prisma/client';
+import { Campsite, Prisma } from '@prisma/client';
 import axios from 'axios';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as xml2js from 'xml2js';
-import { CampsiteSearchRequest } from './campsite.interface';
 
 @Injectable()
 export class CampsitesService {
   constructor(
     private configService: ConfigService,
     private prisma: PrismaService,
-  ) {
-    // prisma.$on<any>('query', (event: Prisma.QueryEvent) => {
-    //   console.log('Query: ' + event.query);
-    //   console.log('Duration: ' + event.duration + 'ms');
-    // });
-  }
+  ) {}
 
   async getCampsitesFromApi(): Promise<boolean> {
     function reachedLastPage(
@@ -55,10 +49,6 @@ export class CampsitesService {
       pageNo = body.pageNo;
       totalCount = body.totalCount;
 
-      // console.log(header);
-      // console.log(totalCount);
-      // console.log(body);
-
       const data: Campsite[] = items.map((item) => {
         console.log(`예약: ${item.resveUrl}`);
 
@@ -95,12 +85,14 @@ export class CampsitesService {
           count++;
           console.log(count);
 
-          await this.prisma.campsite.update({
-            data: item,
-            where: {
-              contentId: item.contentId,
-            },
-          });
+          await this.prisma.campsite.create({ data: item });
+
+          // const result = await this.prisma.campsite.update({
+          //   data: item,
+          //   where: {
+          //     contentId: item.contentId,
+          //   },
+          // });
         });
 
         // Logger.debug('result =', result);
@@ -116,53 +108,42 @@ export class CampsitesService {
     return true;
   }
 
-  async search(
-    request: CampsiteSearchRequest & { page: number; pageSize: number },
-  ) {
-    const filter: any = {
-      AND: [],
-    };
-
-    if (request?.name) {
-      filter.AND.push({ name: { contains: request.name } });
-    }
-
-    if (request?.city) {
-      filter.AND.push({ city: request.city });
-    }
-
-    if (request?.state) {
-      filter.AND.push({ state: request.state });
-    }
-
-    if (request?.amenities && request?.amenities.length > 0) {
-      filter.AND.push({
-        Amenities: { some: { name: { in: request.amenities } } },
-      });
-    }
-
-    const page = request.page || 1;
-    const pageSize = request.pageSize || 10;
-    const skip = (page - 1) * pageSize;
-    const total = await this.prisma.campsite.count();
-    const campsites = await this.prisma.campsite.findMany({
-      where: filter,
-      include: {
-        amenities: true,
-      },
-      skip: skip,
-      take: pageSize,
-    });
-
-    return {
-      page,
-      pageSize,
-      total,
-      campsites,
-    };
+  find(where?: Prisma.CampsiteWhereUniqueInput): Promise<Campsite | null> {
+    return this.prisma.campsite.findUnique({ where });
   }
 
-  create(data) {
-    return this.prisma.campsite.createMany({ data });
+  findAll(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.CampsiteWhereUniqueInput;
+    where?: Prisma.CampsiteWhereInput;
+    orderBy?: Prisma.CampsiteOrderByWithRelationInput;
+  }): Promise<Campsite[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    console.log(params);
+
+    return this.prisma.campsite.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
+  }
+
+  create(data: Prisma.CampsiteCreateInput): Promise<Campsite> {
+    return this.prisma.campsite.create({ data });
+  }
+
+  update(params: {
+    data: Prisma.CampsiteUpdateInput;
+    where: Prisma.CampsiteWhereUniqueInput;
+  }): Promise<Campsite> {
+    const { data, where } = params;
+    return this.prisma.campsite.update({ data, where });
+  }
+
+  remove(where: Prisma.CampsiteWhereUniqueInput): Promise<Campsite> {
+    return this.prisma.campsite.delete({ where });
   }
 }
