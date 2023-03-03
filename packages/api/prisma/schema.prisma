@@ -24,6 +24,7 @@ model Campsite {
   reservationUrl String?
   price          Int?
   amenities      Amenities[]
+  Reviews        Review[]
 }
 
 model Amenities {
@@ -31,4 +32,15 @@ model Amenities {
   name       String
   campsiteId String
   campsite   Campsite @relation(fields: [campsiteId], references: [id])
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  rating     Int
+  text       String
+  createdAt  DateTime
+  updatedAt  DateTime
+  campsiteId String
+  campsite   Campsite @relation(fields: [campsiteId], references: [id])
+  // TODO author String User;
 }
