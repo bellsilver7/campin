@@ -12,8 +12,8 @@ datasource db {
 }
 
 model Campsite {
-  id             String      @id @default(uuid())
-  contentId      Int         @unique
+  id             String    @id @default(uuid())
+  contentId      Int       @unique
   name           String
   intro          String?
   description    String?
@@ -23,11 +23,11 @@ model Campsite {
   imageUrl       String?
   reservationUrl String?
   price          Int?
-  amenities      Amenities[]
-  Reviews        Review[]
+  amenities      Amenity[]
+  reviews        Review[]
 }
 
-model Amenities {
+model Amenity {
   id         String   @id @default(uuid())
   name       String
   campsiteId String

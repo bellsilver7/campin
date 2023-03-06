@@ -113,7 +113,8 @@ export class CampsitesService {
   }
 
   find(where?: Prisma.CampsiteWhereUniqueInput): Promise<Campsite | null> {
-    return this.prisma.campsite.findUnique({ where });
+    const include = { amenities: true, reviews: true };
+    return this.prisma.campsite.findUnique({ where, include });
   }
 
   findAll(params: {
@@ -124,14 +125,14 @@ export class CampsitesService {
     orderBy?: Prisma.CampsiteOrderByWithRelationInput;
   }): Promise<Campsite[]> {
     const { skip, take, cursor, where, orderBy } = params;
-    console.log(params);
-
+    const include = { amenities: true, reviews: true };
     return this.prisma.campsite.findMany({
       skip,
       take,
       cursor,
       where,
       orderBy,
+      include,
     });
   }
 
