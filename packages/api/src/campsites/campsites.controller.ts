@@ -4,8 +4,10 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CampsitesService } from './campsites.service';
 import { Prisma } from '@prisma/client';
@@ -26,11 +28,11 @@ export class CampsitesController {
 
   @Get()
   findAll(
-    @Body('skip') skip: number,
-    @Body('take') take: number,
-    @Body('cursor') cursor: Prisma.CampsiteWhereUniqueInput,
-    @Body('where') where: Prisma.CampsiteWhereInput,
-    @Body('orderBy') orderBy: Prisma.CampsiteOrderByWithRelationInput,
+    @Query('skip', ParseIntPipe) skip: number,
+    @Query('take', ParseIntPipe) take: number,
+    @Query('cursor') cursor: Prisma.CampsiteWhereUniqueInput,
+    @Query('where') where: Prisma.CampsiteWhereInput,
+    @Query('orderBy') orderBy: Prisma.CampsiteOrderByWithRelationInput,
   ) {
     return this.campsiteService.findAll({ skip, take, cursor, where, orderBy });
   }
