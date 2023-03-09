@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 async function bootstrap() {
   dotenv.config(); // .env 파일 로드
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.setGlobalPrefix('api');
 
   await app.listen(3000);
