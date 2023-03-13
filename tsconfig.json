@@ -11,7 +11,9 @@
     "outDir": "dist",
     "baseUrl": "./",
     "paths": {
-      "@campin-monorepo/*": ["packages/*"]
+      "@campin-monorepo/*": [
+        "packages/*"
+      ]
     },
     "incremental": true,
     "skipLibCheck": true,
