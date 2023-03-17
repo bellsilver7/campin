@@ -13,7 +13,7 @@ datasource db {
 
 model Campsite {
   id             String    @id @default(uuid())
-  contentId      Int       @unique
+  contentId      Int
   name           String
   city           String
   state          String
