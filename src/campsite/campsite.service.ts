@@ -32,4 +32,15 @@ export class CampsiteService {
   remove(id: string) {
     return this.prismaService.campsite.delete({ where: { id } });
   }
+
+  async getContentIdToMap() {
+    const campsites = await this.prismaService.campsite.findMany({
+      select: { id: true, contentId: true },
+    });
+
+    return campsites.reduce((map, campsite) => {
+      map[campsite.contentId] = { id: campsite.id };
+      return map;
+    }, {});
+  }
 }
