@@ -12,37 +12,39 @@ datasource db {
 }
 
 model Campsite {
-  id             String    @id @default(uuid())
-  contentId      Int
-  name           String
-  city           String
-  state          String
-  address        String
-  intro          String?
+  id             String    @id @default(uuid()) @db.Uuid
+  contentSource  String    @db.VarChar(12)
+  contentId      String    @db.VarChar(12)
+  name           String    @db.VarChar(100)
+  city           String    @db.VarChar(4)
+  state          String    @db.VarChar(4)
+  address        String    @db.VarChar(100)
+  intro          String?   @db.VarChar(100)
   description    String?
-  imageUrl       String?
-  reservationUrl String?
-  price          Int?
-  amenities      Amenity[]
-  reviews        Review[]
+  imageUrl       String?   @db.VarChar(200)
+  reservationUrl String?   @db.VarChar(200)
+  phoneNumber    String?   @db.VarChar(16)
+  price          Int?      @db.Integer()
   createdAt      DateTime  @default(now())
   updatedAt      DateTime?
+  amenities      Amenity[]
+  Review         Review[]
 }
 
 model Amenity {
-  id         String   @id @default(uuid())
-  name       String
-  campsiteId String
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(50)
+  campsiteId String   @db.Uuid()
   campsite   Campsite @relation(fields: [campsiteId], references: [id])
 }
 
 model Review {
-  id         String    @id @default(uuid())
+  id         String    @id @default(uuid()) @db.Uuid
   rating     Int
   text       String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime?
-  campsiteId String
+  campsiteId String    @db.Uuid()
   campsite   Campsite  @relation(fields: [campsiteId], references: [id])
   // TODO author String User;
 }

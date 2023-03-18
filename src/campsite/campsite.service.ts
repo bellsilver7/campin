@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CampsiteService {
+  private readonly logger = new Logger(CampsiteService.name);
+
   constructor(private readonly prismaService: PrismaService) {}
 
   create(createCampsiteDto: Prisma.CampsiteCreateInput) {
@@ -33,7 +35,29 @@ export class CampsiteService {
     return this.prismaService.campsite.delete({ where: { id } });
   }
 
-  async getContentIdToMap() {
+  async createMany(createData: Prisma.CampsiteCreateManyInput[]) {
+    if (createData.length > 0) {
+      try {
+        const chunk = (arr: any[], size: number) =>
+          Array.from(
+            { length: Math.ceil(arr.length / size) },
+            (_: any, i: number) => arr.slice(i * size, i * size + size),
+          );
+
+        const chunked = chunk(createData, 100);
+        for (const data of chunked) {
+          const result = await this.prismaService.campsite.createMany({ data });
+          this.logger.debug(`campsite createMany result = ${result.count}`);
+        }
+      } catch (error) {
+        this.logger.error(`campsite createMany error = ${error}`);
+      }
+    }
+  }
+
+  async getContentIdToMap(): Promise<{
+    [contentId: string]: Prisma.CampsiteSelect;
+  }> {
     const campsites = await this.prismaService.campsite.findMany({
       select: { id: true, contentId: true },
     });
