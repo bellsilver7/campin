@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Campsite, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -16,8 +16,22 @@ export class CampsiteService {
     return this.prismaService.campsite.findMany();
   }
 
-  filters(where: Prisma.CampsiteWhereInput) {
-    return this.prismaService.campsite.findMany({ where });
+  filteredAll(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.CampsiteWhereUniqueInput;
+    where?: Prisma.CampsiteWhereInput;
+    orderBy?: Prisma.CampsiteOrderByWithRelationInput;
+  }): Promise<Campsite[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    console.log(params);
+    return this.prismaService.campsite.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
   }
 
   findOne(id: string) {
