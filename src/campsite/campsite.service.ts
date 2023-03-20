@@ -16,24 +16,6 @@ export class CampsiteService {
     return this.prismaService.campsite.findMany();
   }
 
-  filteredAll(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.CampsiteWhereUniqueInput;
-    where?: Prisma.CampsiteWhereInput;
-    orderBy?: Prisma.CampsiteOrderByWithRelationInput;
-  }): Promise<Campsite[]> {
-    const { skip, take, cursor, where, orderBy } = params;
-    console.log(params);
-    return this.prismaService.campsite.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-    });
-  }
-
   findOne(id: string) {
     return this.prismaService.campsite.findUnique({ where: { id } });
   }
@@ -47,6 +29,30 @@ export class CampsiteService {
 
   remove(id: string) {
     return this.prismaService.campsite.delete({ where: { id } });
+  }
+
+  search(
+    keyword: string,
+    city: string,
+    page: number,
+    pageSize: number,
+  ): Promise<Campsite[]> {
+    const where: Prisma.CampsiteWhereInput = {};
+    const skip = ((page || 1) - 1) * pageSize;
+    const take = pageSize;
+
+    if (keyword) {
+      where.OR = [
+        { name: { contains: keyword, mode: 'insensitive' } },
+        { city: { contains: keyword, mode: 'insensitive' } },
+      ];
+    }
+
+    if (city) {
+      where.city = city;
+    }
+
+    return this.prismaService.campsite.findMany({ skip, take, where });
   }
 
   async createMany(createData: Prisma.CampsiteCreateManyInput[]) {

@@ -21,24 +21,21 @@ export class CampsiteController {
   }
 
   @Get()
-  filtered(
-    @Query()
-    filterCampsiteDto: {
-      skip?: string;
-      take?: string;
-      cursor?: Prisma.CampsiteWhereUniqueInput;
-      where?: Prisma.CampsiteWhereInput;
-      orderBy?: Prisma.CampsiteOrderByWithRelationInput;
-    },
+  search(
+    @Query('search') search?: string,
+    @Query('city') city?: string,
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
   ) {
-    const { skip, take, cursor, where, orderBy } = filterCampsiteDto;
-    return this.campsiteService.filteredAll({
-      skip: parseInt(skip),
-      take: parseInt(take),
-      cursor,
-      where,
-      orderBy,
-    });
+    const parsedPage = page ? parseInt(page) : 0;
+    const parsedPageSize = pageSize ? parseInt(pageSize) : 12;
+
+    return this.campsiteService.search(
+      search,
+      city,
+      parsedPage,
+      parsedPageSize,
+    );
   }
 
   @Get(':id')
