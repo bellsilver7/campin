@@ -12,7 +12,7 @@ export class CollectionService {
     private readonly gocampingApiService: GocampingApiService,
   ) {}
 
-  @Cron('0 0 * * * *')
+  @Cron('0 0 6 * * *')
   async gocamping() {
     try {
       this.logger.debug('gocamping cron start');
