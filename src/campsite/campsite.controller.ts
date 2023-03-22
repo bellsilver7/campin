@@ -22,7 +22,7 @@ export class CampsiteController {
 
   @Get()
   search(
-    @Query('search') search?: string,
+    @Query('keyword') keyword?: string,
     @Query('city') city?: string,
     @Query('page') page?: string,
     @Query('pageSize') pageSize?: string,
@@ -31,7 +31,7 @@ export class CampsiteController {
     const parsedPageSize = pageSize ? parseInt(pageSize) : 12;
 
     return this.campsiteService.search(
-      search,
+      keyword,
       city,
       parsedPage,
       parsedPageSize,
